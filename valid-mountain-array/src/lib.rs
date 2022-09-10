@@ -1,31 +1,29 @@
+use std::{sync::mpsc, thread};
+
 pub fn valid_mountain_array(arr: Vec<i32>) -> bool {
     if arr.len() < 3 {
         return false;
     }
-    let mut peaked = false;
 
-    for i in 1..arr.len() {
-        if arr[i] > arr[i - 1] {
-            if !peaked {
-                continue;
-            } else {
-                return false;
-            }
-        } else if arr[i] == arr[i - 1] {
-            return false;
-        } else {
-            if !peaked {
-                if i > 1 {
-                    peaked = true;
-                } else {
-                    return false;
-                }
-            }
-            continue;
+    let mut j = arr.len() - 2;
+    let copy = arr.clone();
+    let (tx, rx) = mpsc::channel();
+
+    thread::spawn(move || {
+        let mut i = 1;
+        while arr[i] > arr[i - 1] && i < arr.len() - 1 {
+            i += 1;
         }
+        tx.send(i).unwrap();
+    });
+
+    while copy[j] > copy[j + 1] && j > 0 {
+        j -= 1;
     }
 
-    peaked
+    let i = rx.recv().unwrap();
+
+    return j + 1 == i - 1;
 }
 
 #[cfg(test)]
@@ -79,5 +77,12 @@ mod tests {
         let arr = vec![9, 8, 7, 6, 5, 4, 3, 2, 1, 0];
         let result = valid_mountain_array(arr);
         assert!(!result);
+    }
+
+    #[test]
+    fn test_8() {
+        let arr = vec![0, 1, 2, 3, 2, 1];
+        let result = valid_mountain_array(arr);
+        assert!(result);
     }
 }
