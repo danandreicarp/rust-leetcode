@@ -1,3 +1,7 @@
+pub fn remove_dup(nums: &mut [i32]) -> i32 {
+    nums.len() as i32
+}
+
 pub fn remove_duplicates(nums: &mut Vec<i32>) -> i32 {
     let mut i = 0;
     let mut j = 1;
@@ -29,6 +33,9 @@ mod tests {
         let mut nums = vec![1, 1, 2];
         let result = remove_duplicates(&mut nums);
         assert_eq!(result, 2);
+
+        let mut num = [0, 1, 2, 3, 4];
+        println!("{}", remove_dup(&mut num));
     }
 
     #[test]
