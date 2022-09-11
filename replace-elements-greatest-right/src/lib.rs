@@ -4,19 +4,20 @@ pub fn replace_elements(arr: &mut Vec<i32>) -> Vec<i32> {
         return arr.to_owned();
     }
 
-    let mut i = 0;
-    while i < arr.len() - 1 {
-        let mut max = arr[i + 1];
-        for j in (i + 2)..arr.len() - 1 {
-            if arr[j] > max {
-                max = arr[j];
-            }
+    let mut i = arr.len() - 1;
+    let mut greatest = -1;
+
+    while i > 0 {
+        let temp = greatest;
+        if arr[i] > greatest {
+            greatest = arr[i];
         }
-        arr[i] = max;
-        i += 1;
+        arr[i] = temp;
+
+        i -= 1;
     }
-    let last_index = arr.len() - 1;
-    arr[last_index] = -1;
+
+    arr[i] = greatest;
 
     return arr.to_owned();
 }
