@@ -1,4 +1,4 @@
-pub fn find_numbers(nums: &[i32]) -> i32 {
+pub fn find_numbers_original(nums: &[i32]) -> i32 {
     let mut count = 0;
     for i in nums {
         let digits = count_digits(*i);
@@ -17,6 +17,18 @@ fn count_digits(mut n: i32) -> u8 {
         n /= 10;
     }
     count + 1
+}
+
+pub fn find_numbers(nums: &[i32]) -> i32 {
+    let mut count = 0;
+    for i in nums {
+        let length = i.to_string().len();
+        if length % 2 == 0 {
+            count += 1
+        }
+    }
+
+    count
 }
 
 #[cfg(test)]
@@ -51,5 +63,11 @@ mod tests {
     fn test_5() {
         let result = find_numbers(&[11, 1212, 131313, 14141414]);
         assert_eq!(result, 4);
+    }
+
+    #[test]
+    fn test_6() {
+        let result = find_numbers(&[0]);
+        assert_eq!(result, 0);
     }
 }
